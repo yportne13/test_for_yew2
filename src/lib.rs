@@ -2,7 +2,7 @@ mod components;
 pub mod macros;
 
 use crate::components::{
-    Components, Home,
+    Components, Home, SVG, CANVAS, Settings,
 };
 use material_yew::{
     drawer::{MatDrawerAppContent, MatDrawerTitle},
@@ -20,6 +20,10 @@ use syntect::parsing::SyntaxSet;
 pub enum AppRoute {
     #[at("/components")]
     Components,
+    #[at("/svg")]
+    SVG,
+    #[at("/canvas")]
+    CANVAS,
     #[at("/")]
     Home,
 }
@@ -29,6 +33,7 @@ type AppLink = Link<AppRoute>;
 pub struct App {
     /// `true` represents open; `false` represents close
     drawer_state: bool,
+    settings: Settings,
 }
 
 pub enum Msg {
@@ -54,6 +59,7 @@ impl Component for App {
     fn create(_: &Context<Self>) -> Self {
         Self {
             drawer_state: false,
+            settings: Settings{size: 1, x_axis: 0,},
         }
     }
 
@@ -83,6 +89,26 @@ impl Component for App {
         } else {
             html! {
                  <MatIconButton label="Components">
+                     <img src="/assets/components.png" alt="Components" />
+                 </MatIconButton>
+            }
+        };
+
+        let svg = if !is_on_mobile {
+            html! { <MatButton label="SVG"/>}
+        } else {
+            html! {
+                 <MatIconButton label="SVG">
+                     <img src="/assets/components.png" alt="Components" />
+                 </MatIconButton>
+            }
+        };
+
+        let canvas = if !is_on_mobile {
+            html! { <MatButton label="canvas"/>}
+        } else {
+            html! {
+                 <MatIconButton label="canvas">
                      <img src="/assets/components.png" alt="Components" />
                  </MatIconButton>
             }
@@ -132,6 +158,12 @@ impl Component for App {
                                             <AppLink to={AppRoute::Components}>
                                                 {components}
                                             </AppLink>
+                                            <AppLink to={AppRoute::SVG}>
+                                                {svg}
+                                            </AppLink>
+                                            <AppLink to={AppRoute::CANVAS}>
+                                                {canvas}
+                                            </AppLink>
                                         </span>
                                     </div>
                                 </MatTopAppBarTitle>
@@ -162,9 +194,13 @@ impl Component for App {
 
 impl App {
     fn switch(switch: &AppRoute) -> Html {
+        let settings_temp = Settings{size: 1, x_axis: 0};
+
         match switch {
             AppRoute::Home => html! { <Home />},
             AppRoute::Components => html! { <Components />},
+            AppRoute::SVG => html! { <SVG settings={settings_temp} />},
+            AppRoute::CANVAS => html! { <CANVAS settings={settings_temp} />},
         }
     }
 }
