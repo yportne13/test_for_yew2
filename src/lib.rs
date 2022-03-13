@@ -7,7 +7,7 @@ use crate::components::{
 use material_yew::{
     drawer::{MatDrawerAppContent, MatDrawerTitle},
     top_app_bar_fixed::{MatTopAppBarActionItems, MatTopAppBarNavigationIcon, MatTopAppBarTitle},
-    MatButton, MatDrawer, MatIconButton, MatTopAppBarFixed,
+    MatButton, MatDrawer, MatIconButton, MatTopAppBarFixed, MatSlider,
 };
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -141,6 +141,8 @@ impl Component for App {
                     </MatDrawerTitle>
 
                     <div class="drawer-content">
+                        <h3>{"size"}</h3>
+                        <MatSlider max=50 value=10 step=1 />
                     </div>
                     <MatDrawerAppContent>
                         <div class="app-content">

@@ -27,7 +27,7 @@ impl Component for CANVAS {
     fn create(ctx: &Context<Self>) -> Self {
         let settings = &ctx.props().settings;
         let signals = (0..40)
-            .map(|idx| Signals::new_random(settings, 100+idx*20, idx%3))
+            .map(|idx| Signals::new_random(settings, 10+idx*20, idx%3))
             .collect();
 
         Self { signals, node_ref: NodeRef::default(), }
@@ -38,6 +38,33 @@ impl Component for CANVAS {
         let settings = &ctx.props().settings;
 
         self.signals.iter_mut().for_each(|s| s.update(&settings));
+        /*
+        let canvas = self.node_ref.cast::<web_sys::HtmlCanvasElement>().unwrap();
+
+        let context = canvas
+            .get_context("2d")
+            .unwrap()
+            .unwrap()
+            .dyn_into::<web_sys::CanvasRenderingContext2d>()
+            .unwrap();
+
+        context.begin_path();
+
+        for signal in &self.signals {
+            context.move_to(signal.show[0].1 as f64,signal.show[0].0 as f64);
+            for (a,b) in &signal.show {
+                context.line_to(*b as f64,*a as f64);
+            }
+            if signal.color == 0 {
+                context.set_fill_style(&JsValue::from_str("red"));
+            } else if signal.color == 1 {
+                context.set_fill_style(&JsValue::from_str("green"));
+            } else {
+                context.set_fill_style(&JsValue::from_str("blue"));
+            }
+        }
+
+        context.stroke();*/
 
         true
     }
@@ -58,6 +85,8 @@ impl Component for CANVAS {
             .unwrap()
             .dyn_into::<web_sys::CanvasRenderingContext2d>()
             .unwrap();
+
+        context.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
         context.begin_path();
 

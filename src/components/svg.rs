@@ -1,6 +1,5 @@
 use super::signals::Signals;
 use super::settings::Settings;
-use gloo::timers::callback::Interval;
 use yew::{html, Component, Context, Html, Properties};
 
 #[derive(Debug)]
@@ -24,7 +23,7 @@ impl Component for SVG {
     fn create(ctx: &Context<Self>) -> Self {
         let settings = &ctx.props().settings;
         let signals = (0..40)
-            .map(|idx| Signals::new_random(settings, 100+idx*20, idx%3))
+            .map(|idx| Signals::new_random(settings, 10+idx*20, idx%3))
             .collect();
 
         Self { signals }
