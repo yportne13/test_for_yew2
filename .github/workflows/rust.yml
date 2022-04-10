@@ -13,9 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+    - name: Install rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          override: true
+          
     - uses: actions/checkout@v3
     - name: install trunk
-      run: cargo install trunk
+      run: |
+          cargo install --locked trunk
+          cargo install wasm-bindgen-cli
       
     - uses: actions/checkout@v3
     - name: Build
